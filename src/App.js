@@ -5,12 +5,15 @@ const App = () => {
   const [news, setNews] = useState([]);
   const [searchQuery, setSearchQuery] = useState('react');  //pass 'react' to searchQuery
   const [url, setUrl] = useState('http://hn.algolia.com/api/v1/search?query=react');
+  const [loading, setLoading] = useState(false);   //setLoading like setter method
 
   //fetch news
   const fetchNews = () => {
+    // set loading true
+    setLoading(true)
     fetch(url)
       .then(result => result.json())
-      .then(data => setNews(data.hits))
+      .then(data => (setNews(data.hits), setLoading(false)))
       .catch(error => console.log(error));
   }
 
@@ -30,6 +33,7 @@ const App = () => {
   return (
     <div>
       <h2>News</h2>
+      {loading ? <h2>Loading ...</h2> : ""}
       <form onSubmit={handleSubmit}>
         <input type="text" value={searchQuery} onChange={handleChange} />
         <button>Search</button>
